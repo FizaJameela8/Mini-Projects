@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        overflow: hidden;
+    }
+    #vi {
+        z-index: -1;
+        position: fixed;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #bnt {
+        margin-top: 300px;
+        height: 40px;
+        width: 150px;
+        border-radius: 30px;
+        padding: 10px;
+        background-image: linear-gradient(pink, blue);
+        color: white;
+        font-size: 20px;
+        box-shadow: 2px 2px 5px black;
+    }
+    p{
+        color: white;
+        text-align: left;
+        margin-top: 50px;
+    }
+</style>
+
+<body>
+    <video id="vi" loop autoplay muted>
+        <source src="bg.mp4">
+    </video>
+    <div class="content">
+        <p id="song"></p>
+        <audio id="audio" src="pal.mp3"></audio>
+        <button id="bnt" onclick="run()">Start</button>
+    </div>
+    <script>
+        const ly = ["Pal-pal jeena muhaal mera tere bina",
+            "ये सारे नारे बेकार तेरी आँखों के सिवा",
+            "Ghar nahi jaata, main bahar,rehta tera intezaar",
+            "Mere khwabon mein aa na karke 16 singhaar",
+            "Main ab kyun hosh mein aata nahi?",
+            "सुकून ये दिल क्यों पता नहीं?",
+            "Kyun todun khud se jo the waade?",
+            "Ke ab yeh ishq nibhana nahi",
+            "Main modun tumse jo yeh chehra",
+            "Dobara nazar milana nahi",
+            "Yeh duniya jaane mera dard",
+            "तुझे ये नज़र क्यों आता नहीं?",
+            "Sohneya, yoon tera sharmana meri jaan na le-le",
+            "Kaan ke peechhe zulf chupana, meri jaan, kya kehne!",
+            "Zaalima, tauba tera nakhra! Iske waar kya kehne!",
+            "Thaam ke baithe dil ko ghayal, kahin haar na baithein"
+        ];
+        const ts = [0,4,9,13,18,21,23,25,27,30,32,34,36,40,45,50];
+        function run(){
+            let song=document.getElementById('song');
+            let audio=document.getElementById('audio');
+            let bnt=document.getElementById('bnt');
+
+            bnt.style.display='none';
+            audio.play();
+            let index=0;
+            song.innerHTML="";
+            function typeline(line,d){
+                song.innerHTML+="";
+                 let lyspan=document.createElement('div');
+                if(d===true){
+                     lyspan.style.fontFamily='Arial';
+                     lyspan.style.fontSize='15px';
+                     lyspan.style.textShadow='2px 2px 5px red';
+                }else{
+                    
+                    lyspan.style.fontFamily='Cooper Black';
+                     lyspan.style.fontSize='30px';
+                      lyspan.style.textShadow='2px 2px 5px blue';
+                }
+                let i=0;
+                song.appendChild(lyspan);
+            let intervel=setInterval(()=>{
+               
+               lyspan.innerHTML+=line[i];
+                i++;
+                  if(i>=line.length){
+                 lyspan.innerHTML+='<br>';
+                 clearInterval(intervel);
+                }
+
+                
+            },50)
+              
+            }
+audio.addEventListener('timeupdate',()=>{
+if(index<ts.length && audio.currentTime>=ts[index]){
+                let d;
+                if(index%2==0){
+                    d=true;
+                }
+                typeline(ly[index],d);
+                index++;
+            }
+});
+            audio.addEventListener('ended',()=>{
+                audio.pause();
+                song.innerHTML="";
+                bnt.style.display='block';
+            });
+        }
+    </script>
+</body>
+
+</html>
